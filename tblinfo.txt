@@ -1,0 +1,317 @@
+CREATE TABLE students(
+sid int(5) NOT NULL AUTO_INCREMENT,
+rno char(5) NOT NULL,
+name varchar(45) NOT NULL,
+fname varchar(45) NOT NULL,
+cno varchar(10) NOT NULL,
+Address varchar(100) NOT NULL,
+gender char(1) NOT NULL,
+PRIMARY KEY (sid)
+) ENGINE=InnoDB AUTO_INCREMENT=10000 ;
+
+CREATE TABLE accounts(
+uname varchar(45) NOT NULL,
+name varchar(45) NOT NULL,
+pwd varchar(45) NOT NULL,
+secq varchar(100) NOT NULL,
+secans varchar(100) NOT NULL,
+deleted char(1) NOT NULL,
+PRIMARY KEY (uname)
+) ENGINE=InnoDB ;
+
+CREATE TABLE books(
+bid int(7) NOT NULL AUTO_INCREMENT,
+bname varchar(50) NOT NULL,
+pages int(5) NOT NULL,
+pubname varchar(45) NOT NULL,
+writname varchar(45) NOT NULL,
+edition varchar(30) NOT NULL,
+price int(9) DEFAULT NULL,
+addon date NOT NULL,
+source varchar(100) NOT NULL,
+issued char(1) NOT NULL,
+PRIMARY KEY (bid)
+) ENGINE=INNODB AUTO_INCREMENT=1000000 ;
+
+CREATE TABLE evl(
+octime datetime NOT NULL,
+descr varchar(50) NOT NULL
+) ENGINE=InnoDB ;
+
+CREATE TABLE issues(
+iid int(7) NOT NULL AUTO_INCREMENT,
+bid int(7) NOT NULL,
+rno char(5) DEFAULT NULL,
+price int(9) DEFAULT NULL,
+ion date NOT NULL,
+bname varchar(50) NOT NULL,
+pages int(5) NOT NULL,
+isto varchar(45) NOT NULL,
+sid int(5) DEFAULT NULL,
+gender char(1) NOT NULL,
+PRIMARY KEY (iid),
+FOREIGN KEY (bid) REFERENCES books (bid) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (sid) REFERENCES students (sid) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1000000 ;
+
+CREATE TABLE bookaddlog(
+addon date NOT NULL,
+bid int(7) NOT NULL,
+bname varchar(50) NOT NULL,
+pages int(5) NOT NULL,
+pubname varchar(45) NOT NULL,
+writname varchar(45) NOT NULL,
+edition varchar(30) NOT NULL,
+price int(9) DEFAULT NULL,
+addby varchar(45) NOT NULL,
+source varchar(100) NOT NULL,
+PRIMARY KEY (bid),
+FOREIGN KEY (addby) REFERENCES accounts (uname)
+) ENGINE=INNODB ;
+
+CREATE TABLE bookremlog(
+remon date NOT NULL,
+bid int(7) NOT NULL,
+bname varchar(50) NOT NULL,
+pages int(5) NOT NULL,
+pubname varchar(45) NOT NULL,
+writname varchar(45) NOT NULL,
+edition varchar(30) NOT NULL,
+price int(9) DEFAULT NULL,
+remby varchar(45) NOT NULL,
+reason varchar(100) NOT NULL,
+PRIMARY KEY (bid),
+FOREIGN KEY (remby) REFERENCES accounts (uname)
+) ENGINE=INNODB ;
+
+CREATE TABLE issuelog(
+ion date NOT NULL,
+iid int(7) NOT NULL,
+bid int(7) NOT NULL,
+rno char(5) DEFAULT NULL,
+price int(9) DEFAULT NULL,
+isby varchar(45) NOT NULL,
+period int(5) DEFAULT NULL,
+bname varchar(50) NOT NULL,
+pages int(5) NOT NULL,
+isto varchar(45) NOT NULL,
+sid int(5) DEFAULT NULL,
+PRIMARY KEY (iid),
+FOREIGN KEY (isby) REFERENCES accounts (uname)
+) ENGINE=InnoDB ;
+
+CREATE TABLE returnlog(
+ron date NOT NULL,
+iid int(7) NOT NULL,
+bid int(7) NOT NULL,
+rno char(5) DEFAULT NULL,
+price int(9) DEFAULT NULL,
+reto varchar(45) NOT NULL,
+period int(5) NOT NULL,
+bname varchar(50) NOT NULL,
+pages int(5) NOT NULL,
+reby varchar(45) NOT NULL,
+sid int(5) DEFAULT NULL,
+PRIMARY KEY (iid),
+FOREIGN KEY (reto) REFERENCES accounts (uname)
+) ENGINE=InnoDB ;
+
+ALTER TABLE issuelog
+ADD (
+pubname varchar(45) NOT NULL,
+writname varchar(45) NOT NULL,
+edition varchar(30) NOT NULL,
+source varchar(100) NOT NULL,
+avail char(1) NOT NULL,
+fname varchar(45) DEFAULT NULL,
+cno varchar(10) DEFAULT NULL,
+Address varchar(100) DEFAULT NULL,
+gender char(1) DEFAULT NULL ) ;
+
+ALTER TABLE returnlog
+ADD (
+pubname varchar(45) NOT NULL,
+writname varchar(45) NOT NULL,
+edition varchar(30) NOT NULL,
+source varchar(100) NOT NULL,
+avail char(1) NOT NULL,
+fname varchar(45) DEFAULT NULL,
+cno varchar(10) DEFAULT NULL,
+Address varchar(100) DEFAULT NULL,
+gender char(1) DEFAULT NULL ) ;
+
+=
+<
+>
+starts with
+ends with
+includes
+
+Book Id.
+Book Name
+Pages
+Publisher
+Writer
+Edition
+Price
+Added on
+Source
+Issued
+
+AllBooksFrame query:-
+"SELECT CONV(bid,10,26),bname,pages,pubname,writname,edition,price,addon,source,issued FROM books WHERE "+(inv1 ? "NOT " : "")+sfield1+" "+(scrit1.length()==1 ? scrit1 : "LIKE")+" \'"+(scrit1=="ends with" || scrit1=="includes" ? "%" : "")+search1+(scrit1=="starts with" || scrit1=="includes" ? "%" : "")+"\' AND "+(inv2 ? "NOT " : "")+sfield2+" "+(scrit2.length()==1 ? scrit2 : "LIKE")+" \'"+(scrit2=="ends with" || scrit2=="includes" ? "%" : "")+search2+(scrit2=="starts with" || scrit2=="includes" ? "%" : "")+"\' AND "+(inv3 ? "NOT " : "")+sfield3+" "+(scrit3.length()==1 ? scrit3 : "LIKE")+" \'"+(scrit3=="ends with" || scrit3=="includes" ? "%" : "")+search3+(scrit3=="starts with" || scrit3=="includes" ? "%" : "")+"\' ORDER BY "+sorter+(sortdesc ? " DESC " : " ")+";"
+
+
+Added on
+Book Id.
+Book Name
+Pages
+Publisher
+Writer
+Edition
+Price
+Added by
+Source
+
+ABookLogFrame query:-
+"SELECT addon,CONV(bid,10,26),bname,pages,pubname,writname,edition,price,addby,source FROM bookaddlog WHERE "+(inv1 ? "NOT " : "")+sfield1+" "+(scrit1.length()==1 ? scrit1 : "LIKE")+" \'"+(scrit1=="ends with" || scrit1=="includes" ? "%" : "")+search1+(scrit1=="starts with" || scrit1=="includes" ? "%" : "")+"\' AND "+(inv2 ? "NOT " : "")+sfield2+" "+(scrit2.length()==1 ? scrit2 : "LIKE")+" \'"+(scrit2=="ends with" || scrit2=="includes" ? "%" : "")+search2+(scrit2=="starts with" || scrit2=="includes" ? "%" : "")+"\' AND "+(inv3 ? "NOT " : "")+sfield3+" "+(scrit3.length()==1 ? scrit3 : "LIKE")+" \'"+(scrit3=="ends with" || scrit3=="includes" ? "%" : "")+search3+(scrit3=="starts with" || scrit3=="includes" ? "%" : "")+"\' ORDER BY "+sorter+(sortdesc ? " DESC " : " ")+";"
+
+
+Removed on
+Book Id.
+Book name
+Pages
+Publisher
+Writer
+Edition
+Price
+Removed by
+Reason
+
+RBookLogFrame query:-
+"SELECT remon,CONV(bid,10,26),bname,pages,pubname,writname,edition,price,remby,reason FROM bookremlog WHERE "+(inv1 ? "NOT " : "")+sfield1+" "+(scrit1.length()==1 ? scrit1 : "LIKE")+" \'"+(scrit1=="ends with" || scrit1=="includes" ? "%" : "")+search1+(scrit1=="starts with" || scrit1=="includes" ? "%" : "")+"\' AND "+(inv2 ? "NOT " : "")+sfield2+" "+(scrit2.length()==1 ? scrit2 : "LIKE")+" \'"+(scrit2=="ends with" || scrit2=="includes" ? "%" : "")+search2+(scrit2=="starts with" || scrit2=="includes" ? "%" : "")+"\' AND "+(inv3 ? "NOT " : "")+sfield3+" "+(scrit3.length()==1 ? scrit3 : "LIKE")+" \'"+(scrit3=="ends with" || scrit3=="includes" ? "%" : "")+search3+(scrit3=="starts with" || scrit3=="includes" ? "%" : "")+"\' ORDER BY "+sorter+(sortdesc ? " DESC " : " ")+";"
+
+
+Issue Id.
+Book Id.
+Roll no.
+Price
+Days ago
+Book name
+Pages
+Issued to
+Student Id.
+
+IssuesFrame query:-
+"SELECT CONV(iid,10,27),CONV(bid,10,26),rno,gender,price,DATEDIFF(CURDATE(),ion),bname,pages,isto,CONV(sid,10,18) FROM issues WHERE "+(inv1 ? "NOT " : "")+sfield1+" "+(scrit1.length()==1 ? scrit1 : "LIKE")+" \'"+(scrit1=="ends with" || scrit1=="includes" ? "%" : "")+search1+(scrit1=="starts with" || scrit1=="includes" ? "%" : "")+"\' AND "+(inv2 ? "NOT " : "")+sfield2+" "+(scrit2.length()==1 ? scrit2 : "LIKE")+" \'"+(scrit2=="ends with" || scrit2=="includes" ? "%" : "")+search2+(scrit2=="starts with" || scrit2=="includes" ? "%" : "")+"\' AND "+(inv3 ? "NOT " : "")+sfield3+" "+(scrit3.length()==1 ? scrit3 : "LIKE")+" \'"+(scrit3=="ends with" || scrit3=="includes" ? "%" : "")+search3+(scrit3=="starts with" || scrit3=="includes" ? "%" : "")+"\' ORDER BY "+sorter+(sortdesc ? " DESC " : " ")+";"
+
+
+Issued on
+Issue Id.
+Book Id.
+Roll no.
+Gender
+Price
+Issued by
+Period
+Book name
+Pages
+Issued to
+Student Id.
+
+INSERT INTO issuelog
+VALUES ('2019-12-6',1000000,1000000,'1204A',495,'Admin',null,'informatics practices a text book for class XII',564,'Kshitij Soni',10003,'DHANPAT RAI & Co.','Sumita Arora','2018','Some stationary in bhopal','Y','Sunil Soni','5252173352','Cement Road, Pipariya','M')
+
+IIssueLogFrame query:-
+"SELECT ion,CONV(iid,10,27),CONV(bid,10,26),rno,gender,price,isby,period,bname,pages,isto,CONV(sid,10,18) FROM issuelog WHERE "+(inv1 ? "NOT " : "")+sfield1+" "+(scrit1.length()==1 ? scrit1 : "LIKE")+" \'"+(scrit1=="ends with" || scrit1=="includes" ? "%" : "")+search1+(scrit1=="starts with" || scrit1=="includes" ? "%" : "")+"\' AND "+(inv2 ? "NOT " : "")+sfield2+" "+(scrit2.length()==1 ? scrit2 : "LIKE")+" \'"+(scrit2=="ends with" || scrit2=="includes" ? "%" : "")+search2+(scrit2=="starts with" || scrit2=="includes" ? "%" : "")+"\' AND "+(inv3 ? "NOT " : "")+sfield3+" "+(scrit3.length()==1 ? scrit3 : "LIKE")+" \'"+(scrit3=="ends with" || scrit3=="includes" ? "%" : "")+search3+(scrit3=="starts with" || scrit3=="includes" ? "%" : "")+"\' ORDER BY "+sorter+(sortdesc ? " DESC " : " ")+";"
+
+
+Returned on
+Issue Id.
+Book Id.
+Roll no.
+Gender
+Price
+Returned to
+Period
+Book name
+Pages
+Returned by
+Student Id.
+
+INSERT INTO returnlog
+VALUES ('2019-12-04',2000000,1000000,'1204A',495,'Admin',0,'informatics practices a text book for class XII',564,'Kshitij Soni',10003,'DHANPAT RAI & Co.','Sumita Arora','2018','Some stationary in bhopal','Y','Sunil Soni','5252173352','Cement Road, Pipariya','M')
+
+RIssueLogFrame query:-
+"SELECT ron,CONV(iid,10,27),CONV(bid,10,26),rno,gender,price,reto,period,bname,pages,reby,CONV(sid,10,18) FROM returnlog WHERE "+(inv1 ? "NOT " : "")+sfield1+" "+(scrit1.length()==1 ? scrit1 : "LIKE")+" \'"+(scrit1=="ends with" || scrit1=="includes" ? "%" : "")+search1+(scrit1=="starts with" || scrit1=="includes" ? "%" : "")+"\' AND "+(inv2 ? "NOT " : "")+sfield2+" "+(scrit2.length()==1 ? scrit2 : "LIKE")+" \'"+(scrit2=="ends with" || scrit2=="includes" ? "%" : "")+search2+(scrit2=="starts with" || scrit2=="includes" ? "%" : "")+"\' AND "+(inv3 ? "NOT " : "")+sfield3+" "+(scrit3.length()==1 ? scrit3 : "LIKE")+" \'"+(scrit3=="ends with" || scrit3=="includes" ? "%" : "")+search3+(scrit3=="starts with" || scrit3=="includes" ? "%" : "")+"\' ORDER BY "+sorter+(sortdesc ? " DESC " : " ")+";"
+
+
+Student Id.
+Roll no.
+Name
+Gender
+Father's name
+Contact no.
+Address
+
+RegisteredStudentsFrame query:-
+"SELECT CONV(sid,10,18),rno,name,gender,fname,cno,address FROM students WHERE "+(inv1 ? "NOT " : "")+sfield1+" "+(scrit1.length()==1 ? scrit1 : "LIKE")+" \'"+(scrit1=="ends with" || scrit1=="includes" ? "%" : "")+search1+(scrit1=="starts with" || scrit1=="includes" ? "%" : "")+"\' AND "+(inv2 ? "NOT " : "")+sfield2+" "+(scrit2.length()==1 ? scrit2 : "LIKE")+" \'"+(scrit2=="ends with" || scrit2=="includes" ? "%" : "")+search2+(scrit2=="starts with" || scrit2=="includes" ? "%" : "")+"\' AND "+(inv3 ? "NOT " : "")+sfield3+" "+(scrit3.length()==1 ? scrit3 : "LIKE")+" \'"+(scrit3=="ends with" || scrit3=="includes" ? "%" : "")+search3+(scrit3=="starts with" || scrit3=="includes" ? "%" : "")+"\' ORDER BY "+sorter+(sortdesc ? " DESC " : " ")+";"
+
+
+Occurence time
+Description
+Caused by
+
+EventLogFrame query:-
+"SELECT octime,descr,cby FROM evl WHERE "+(inv1 ? "NOT " : "")+sfield1+" "+(scrit1.length()==1 ? scrit1 : "LIKE")+" \'"+(scrit1=="ends with" || scrit1=="includes" ? "%" : "")+search1+(scrit1=="starts with" || scrit1=="includes" ? "%" : "")+"\' AND "+(inv2 ? "NOT " : "")+sfield2+" "+(scrit2.length()==1 ? scrit2 : "LIKE")+" \'"+(scrit2=="ends with" || scrit2=="includes" ? "%" : "")+search2+(scrit2=="starts with" || scrit2=="includes" ? "%" : "")+"\' AND "+(inv3 ? "NOT " : "")+sfield3+" "+(scrit3.length()==1 ? scrit3 : "LIKE")+" \'"+(scrit3=="ends with" || scrit3=="includes" ? "%" : "")+search3+(scrit3=="starts with" || scrit3=="includes" ? "%" : "")+"\' ORDER BY "+sorter+(sortdesc ? " DESC " : " ")+";"
+
+
+UserName
+Name
+Deleted
+
+ManageAccountsDialog query:-
+"SELECT uname,name,deleted FROM accounts "+(dcheck ? "" : "WHERE deleted = \'N\' ")+";"
+
+
+AddStudent query:-
+"INSERT INTO students (rno,name,fname,cno,address,gender) VALUES('"+indata[0]+"','"+indata[1]+indata[2]+indata[3]+"','"+indata[4]+indata[5]+indata[6]+"',"+indata[7]+",'"+indata[8]+"','"+indata[9]+"') ;"
+"INSERT INTO evl VALUES(NOW(),'Student "+indata[0]+" added. Name- "+indata[1]+indata[2]+indata[3]+"','"+mnfobj.LoggedInUserName+"') ;"
+
+
+AddBook query:-
+"INSERT INTO books (bname,pages,pubname,writname,edition,price,addon,source,issued) VALUES('"+bname+"',"+pages+",'"+pubname+"','"+writname+"','"+edition+"',"+(price.length()==0 ? null : price)+",CURDATE(),'"+source+"','N') ;"
+"INSERT INTO evl VALUES(NOW(),'Book added. Name- "+bname+"','"+mnfobj.LoggedInUserName+"') ;"
+"INSERT INTO books (bname,pages,pubname,writname,edition,price,addon,source,addby) VALUES('"+bname+"',"+pages+",'"+pubname+"','"+writname+"','"+edition+"',"+(price.length()==0 ? null : price)+",CURDATE(),'"+source+"','"+mnfobj.LoggedInUserName+"') ;"
+
+
+RemoveBook query:-
+"INSERT INTO bookremlog (bname,pages,pubname,writname,edition,price,remon,reason,remby) VALUES('"+bname+"',"+pages+",'"+pubname+"','"+writname+"','"+edition+"',"+(price.length()==0 ? null : price)+",CURDATE(),'"+reason+"','"+mnfobj.LoggedInUserName+"') ;"
+
+String outs = "" ;
+for(int i=0 ; i<ins.length() ; i++){
+        char thechar = ins.charAt(i);
+    if(thechar=='\\'||thechar=='\''||thechar=='\"'||thechar=='%'||thechar=='_')
+         outs = outs+"\\"+thechar ;
+    else outs = outs+thechar ;
+}
+Newlibrarymanagementsystem.MysqlEscapeSeq()
+
+
+IssueBookquery:-
+"INSERT INTO issues (bid,rno,price,ion,bname,pages,isto,sid,gender) VALUES ("+bid+","+(rno.equals("") ? "null" : "'"+rno+"'")+","+(price.equals("") ? "null" : price)+",CURDATE(),'"+bname+"',"+pages+",'"+isto+"',"+(sid.equals("") ? "null" : sid)+",'"+gender+"') ;"
+"INSERT INTO issuelog (bid,rno,price,ion,bname,pages,isto,sid,gender,iid,isby,period,pubname,writname,edition,source,avail,fname,cno,address,addon) VALUES ("+bid+","+(rno.equals("") ? "null" : "'"+rno+"'")+","+(price.equals("") ? "null" : price)+",CURDATE(),'"+bname+"',"+pages+",'"+isto+"',"+(sid.equals("") ? "null" : sid)+",'"+gender+"',"+iid+",'"+isby+"',null,'"+pubname+"','"+writname+"','"+edition+"','"+source+"','Y',"+(fname.equals("") ? "null" : "'"+fname+"'")+","+(cno.equals("") ? "null" : cno)+","+(address.equals("") ? "null" : "'"+address+"'")+",'"+addon+"') ;"
+
+
+ReturnBookquery:-
+"INSERT INTO returnlog (bid,rno,price,ron,bname,pages,reby,sid,gender,iid,reto,period,pubname,writname,edition,source,avail,fname,cno,address,addon) VALUES ("+bid+","+(rno.equals("") ? "null" : "'"+rno+"'")+","+(price.equals("") ? "null" : price)+",CURDATE(),'"+bname+"',"+pages+",'"+reby+"',"+(sid.equals("") ? "null" : sid)+",'"+gender+"',"+iid+",'"+reto+"',DATEDIFF(CURDATE(),'"+ion+"'),'"+pubname+"','"+writname+"','"+edition+"','"+source+"','Y',"+(fname.equals("") ? "null" : "'"+fname+"'")+","+(cno.equals("") ? "null" : cno)+","+(address.equals("") ? "null" : "'"+address+"'")+",'"+addon+"') ;"
+
+
+AddAccountquery:-
+"INSERT INTO accounts VALUES ('"+uname+"','"+name+"','"+pwd+"','"+secq+"','"+secans+"','N') ;"
+
+
+
+
+
+

@@ -1,0 +1,337 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.1.33-community
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema newlibman
+--
+
+CREATE DATABASE IF NOT EXISTS newlibman;
+USE newlibman;
+
+--
+-- Definition of table `accounts`
+--
+
+DROP TABLE IF EXISTS `accounts`;
+CREATE TABLE `accounts` (
+  `uname` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `pwd` varchar(45) NOT NULL,
+  `secq` varchar(100) NOT NULL,
+  `secans` varchar(100) NOT NULL,
+  `deleted` char(1) NOT NULL,
+  PRIMARY KEY (`uname`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `accounts`
+--
+
+/*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
+INSERT INTO `accounts` (`uname`,`name`,`pwd`,`secq`,`secans`,`deleted`) VALUES 
+ ('Admin','Admin','bhavesh','what is your favourite colour?','black','N'),
+ ('ashi','ASHI  PANDEY','12345','Your bestie name ?','shreya','N'),
+ ('chitranshi','CHITRANSHI PATEL','234','What is your favourite colour ?','red','N'),
+ ('kshitij','KSHITIJ SONI','54321','What is your favourite colour ?','WHITE','Y'),
+ ('kshitj','kshitj soni','soni','What is your favourite colour ?','koi sa nhi','N');
+/*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
+
+
+--
+-- Definition of table `bookaddlog`
+--
+
+DROP TABLE IF EXISTS `bookaddlog`;
+CREATE TABLE `bookaddlog` (
+  `addon` date NOT NULL,
+  `bid` int(7) NOT NULL,
+  `bname` varchar(50) NOT NULL,
+  `pages` int(5) NOT NULL,
+  `pubname` varchar(45) NOT NULL,
+  `writname` varchar(45) NOT NULL,
+  `edition` varchar(30) NOT NULL,
+  `price` int(9) DEFAULT NULL,
+  `addby` varchar(45) NOT NULL,
+  `source` varchar(100) NOT NULL,
+  PRIMARY KEY (`bid`),
+  KEY `addby` (`addby`),
+  CONSTRAINT `bookaddlog_ibfk_1` FOREIGN KEY (`addby`) REFERENCES `accounts` (`uname`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bookaddlog`
+--
+
+/*!40000 ALTER TABLE `bookaddlog` DISABLE KEYS */;
+INSERT INTO `bookaddlog` (`addon`,`bid`,`bname`,`pages`,`pubname`,`writname`,`edition`,`price`,`addby`,`source`) VALUES 
+ ('2019-12-24',1000018,'ip',657,'hoga koi','sumita arora','2019-2020',450,'chitranshi','bhopal'),
+ ('2019-12-24',1000019,'ip 11th',567,'hoga koi','sumita arora','2018-2019',NULL,'Admin','bhopal'),
+ ('2019-12-24',1000020,'harry potter part 1',400,'scholastics','jk rowling','1st',NULL,'Admin','bhopal'),
+ ('2020-01-03',1000021,'ip class 12th',556,'sumita arora','sumita arora','2019-2020',450,'Admin','bhopal');
+/*!40000 ALTER TABLE `bookaddlog` ENABLE KEYS */;
+
+
+--
+-- Definition of table `bookremlog`
+--
+
+DROP TABLE IF EXISTS `bookremlog`;
+CREATE TABLE `bookremlog` (
+  `remon` date NOT NULL,
+  `bid` int(7) NOT NULL,
+  `bname` varchar(50) NOT NULL,
+  `pages` int(5) NOT NULL,
+  `pubname` varchar(45) NOT NULL,
+  `writname` varchar(45) NOT NULL,
+  `edition` varchar(30) NOT NULL,
+  `price` int(9) DEFAULT NULL,
+  `remby` varchar(45) NOT NULL,
+  `reason` varchar(100) NOT NULL,
+  `source` varchar(100) NOT NULL,
+  `addon` date NOT NULL,
+  PRIMARY KEY (`bid`),
+  KEY `remby` (`remby`),
+  CONSTRAINT `bookremlog_ibfk_1` FOREIGN KEY (`remby`) REFERENCES `accounts` (`uname`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bookremlog`
+--
+
+/*!40000 ALTER TABLE `bookremlog` DISABLE KEYS */;
+INSERT INTO `bookremlog` (`remon`,`bid`,`bname`,`pages`,`pubname`,`writname`,`edition`,`price`,`remby`,`reason`,`source`,`addon`) VALUES 
+ ('2019-12-24',1000019,'ip 11th',567,'hoga koi','sumita arora','2018-2019',NULL,'Admin','fhfhy','bhopal','2019-12-24'),
+ ('2020-01-06',1000021,'ip class 12th',556,'sumita arora','sumita arora','2019-2020',450,'Admin','fhhfy','bhopal','2020-01-03');
+/*!40000 ALTER TABLE `bookremlog` ENABLE KEYS */;
+
+
+--
+-- Definition of table `books`
+--
+
+DROP TABLE IF EXISTS `books`;
+CREATE TABLE `books` (
+  `bid` int(7) NOT NULL AUTO_INCREMENT,
+  `bname` varchar(50) NOT NULL,
+  `pages` int(5) NOT NULL,
+  `pubname` varchar(45) NOT NULL,
+  `writname` varchar(45) NOT NULL,
+  `edition` varchar(30) NOT NULL,
+  `price` int(9) DEFAULT NULL,
+  `addon` date NOT NULL,
+  `source` varchar(100) NOT NULL,
+  `issued` char(1) NOT NULL,
+  PRIMARY KEY (`bid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1000021 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `books`
+--
+
+/*!40000 ALTER TABLE `books` DISABLE KEYS */;
+INSERT INTO `books` (`bid`,`bname`,`pages`,`pubname`,`writname`,`edition`,`price`,`addon`,`source`,`issued`) VALUES 
+ (1000013,'HARRY POTTER AND THE PRISONER OF AZKABAN',300,'SCHOLASTICS','J.K. ROWLING','1ST',NULL,'2019-12-23','BHOPAL','N'),
+ (1000014,'HARRY POTTER AND THE GOBLET OF FIRE',400,'SCHOLASTICS','J.K. ROWLING','1ST',NULL,'2019-12-23','BHOPAL','Y'),
+ (1000015,'HARRY POTTER AND THE ORDER OF PHEONIX',322,'SCHOLASTICS','J.K. ROWING','1ST',NULL,'2019-12-23','BHOPAL','Y'),
+ (1000016,'HARRY POTTER AND THE HALF BLOD PRINCE',432,'SCHLASTICS','J.K. ROWLING','1ST',NULL,'2019-12-23','BHOPAL','N'),
+ (1000017,'HARRY POTTER AND THE DEATHLY HALLOWS',545,'SCHOLASTICS','J.K. ROWLING','1ST',NULL,'2019-12-23','BHOPAL','N'),
+ (1000018,'ip',657,'hoga koi','sumita arora','2019-2020',450,'2019-12-24','bhopal','N'),
+ (1000020,'harry potter part 1',400,'scholastics','jk rowling','1st',NULL,'2019-12-24','bhopal','N');
+/*!40000 ALTER TABLE `books` ENABLE KEYS */;
+
+
+--
+-- Definition of table `evl`
+--
+
+DROP TABLE IF EXISTS `evl`;
+CREATE TABLE `evl` (
+  `octime` datetime NOT NULL,
+  `descr` varchar(50) NOT NULL,
+  `cby` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `evl`
+--
+
+/*!40000 ALTER TABLE `evl` DISABLE KEYS */;
+INSERT INTO `evl` (`octime`,`descr`,`cby`) VALUES 
+ ('2020-07-06 17:49:49','book 24N88 removed. Name- harry potter part 1','Admin'),
+ ('2020-07-06 17:50:19','book 24N88 restored. Name- harry potter part 1','Admin');
+/*!40000 ALTER TABLE `evl` ENABLE KEYS */;
+
+
+--
+-- Definition of table `issuelog`
+--
+
+DROP TABLE IF EXISTS `issuelog`;
+CREATE TABLE `issuelog` (
+  `ion` date NOT NULL,
+  `iid` int(7) NOT NULL,
+  `bid` int(7) NOT NULL,
+  `rno` char(5) DEFAULT NULL,
+  `price` int(9) DEFAULT NULL,
+  `isby` varchar(45) NOT NULL,
+  `period` int(5) DEFAULT NULL,
+  `bname` varchar(50) NOT NULL,
+  `pages` int(5) NOT NULL,
+  `isto` varchar(45) NOT NULL,
+  `sid` int(5) DEFAULT NULL,
+  `pubname` varchar(45) NOT NULL,
+  `writname` varchar(45) NOT NULL,
+  `edition` varchar(30) NOT NULL,
+  `source` varchar(100) NOT NULL,
+  `avail` char(1) NOT NULL,
+  `fname` varchar(45) DEFAULT NULL,
+  `cno` varchar(10) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `gender` char(1) DEFAULT NULL,
+  `addon` date NOT NULL,
+  PRIMARY KEY (`iid`),
+  KEY `isby` (`isby`),
+  CONSTRAINT `issuelog_ibfk_1` FOREIGN KEY (`isby`) REFERENCES `accounts` (`uname`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `issuelog`
+--
+
+/*!40000 ALTER TABLE `issuelog` DISABLE KEYS */;
+INSERT INTO `issuelog` (`ion`,`iid`,`bid`,`rno`,`price`,`isby`,`period`,`bname`,`pages`,`isto`,`sid`,`pubname`,`writname`,`edition`,`source`,`avail`,`fname`,`cno`,`address`,`gender`,`addon`) VALUES 
+ ('2019-12-23',1000006,1000015,'1201A',NULL,'Admin',NULL,'HARRY POTTER AND THE ORDER OF PHEONIX',322,'Ashi Pandey',10015,'SCHOLASTICS','J.K. ROWING','1ST','BHOPAL','Y','Krishna Kumar Pandey','2348758798','PACHMARHI ROAD','F','2019-12-23'),
+ ('2019-12-23',1000007,1000014,'1202A',NULL,'Admin',NULL,'HARRY POTTER AND THE GOBLET OF FIRE',400,'Bhavesh Bhanusali',10013,'SCHOLASTICS','J.K. ROWLING','1ST','BHOPAL','Y','Harish Bhanusali','2738374650','KABRA COLONY,PIPARIYA','M','2019-12-23'),
+ ('2019-12-23',1000008,1000012,'1208A',NULL,'Admin',0,'HARRY POTTER AND THE CHAMBER OF SECRETS',330,'Shreya Tiwari',10017,'SCHOLASTICS','J.K. ROWLING','1ST','BHOPAL','Y','Jitendra Tiwari','6778943456','MATAMARG SANGAM','F','2019-12-23'),
+ ('2019-12-23',1000009,1000017,'1204A',NULL,'Admin',11,'HARRY POTTER AND THE DEATHLY HALLOWS',545,'Kshitij Soni',10014,'SCHOLASTICS','J.K. ROWLING','1ST','BHOPAL','Y','Sunil Soni','8347895498','KABRA COLONY','M','2019-12-23');
+/*!40000 ALTER TABLE `issuelog` ENABLE KEYS */;
+
+
+--
+-- Definition of table `issues`
+--
+
+DROP TABLE IF EXISTS `issues`;
+CREATE TABLE `issues` (
+  `iid` int(7) NOT NULL AUTO_INCREMENT,
+  `bid` int(7) NOT NULL,
+  `rno` char(5) DEFAULT NULL,
+  `price` int(9) DEFAULT NULL,
+  `ion` date NOT NULL,
+  `bname` varchar(50) NOT NULL,
+  `pages` int(5) NOT NULL,
+  `isto` varchar(45) NOT NULL,
+  `sid` int(5) DEFAULT NULL,
+  `gender` char(1) NOT NULL,
+  PRIMARY KEY (`iid`),
+  KEY `bid` (`bid`),
+  KEY `sid` (`sid`),
+  CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`bid`) REFERENCES `books` (`bid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`sid`) REFERENCES `students` (`sid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1000008 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `issues`
+--
+
+/*!40000 ALTER TABLE `issues` DISABLE KEYS */;
+INSERT INTO `issues` (`iid`,`bid`,`rno`,`price`,`ion`,`bname`,`pages`,`isto`,`sid`,`gender`) VALUES 
+ (1000006,1000015,'1201A',NULL,'2019-12-23','HARRY POTTER AND THE ORDER OF PHEONIX',322,'Ashi Pandey',10015,'F'),
+ (1000007,1000014,'1202A',NULL,'2019-12-23','HARRY POTTER AND THE GOBLET OF FIRE',400,'Bhavesh Bhanusali',10013,'M');
+/*!40000 ALTER TABLE `issues` ENABLE KEYS */;
+
+
+--
+-- Definition of table `returnlog`
+--
+
+DROP TABLE IF EXISTS `returnlog`;
+CREATE TABLE `returnlog` (
+  `ron` date NOT NULL,
+  `iid` int(7) NOT NULL,
+  `bid` int(7) NOT NULL,
+  `rno` char(5) DEFAULT NULL,
+  `price` int(9) DEFAULT NULL,
+  `reto` varchar(45) NOT NULL,
+  `period` int(5) NOT NULL,
+  `bname` varchar(50) NOT NULL,
+  `pages` int(5) NOT NULL,
+  `reby` varchar(45) NOT NULL,
+  `sid` int(5) DEFAULT NULL,
+  `pubname` varchar(45) NOT NULL,
+  `writname` varchar(45) NOT NULL,
+  `edition` varchar(30) NOT NULL,
+  `source` varchar(100) NOT NULL,
+  `avail` char(1) NOT NULL,
+  `fname` varchar(45) DEFAULT NULL,
+  `cno` varchar(10) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `gender` char(1) DEFAULT NULL,
+  `addon` date NOT NULL,
+  PRIMARY KEY (`iid`),
+  KEY `reto` (`reto`),
+  CONSTRAINT `returnlog_ibfk_1` FOREIGN KEY (`reto`) REFERENCES `accounts` (`uname`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `returnlog`
+--
+
+/*!40000 ALTER TABLE `returnlog` DISABLE KEYS */;
+INSERT INTO `returnlog` (`ron`,`iid`,`bid`,`rno`,`price`,`reto`,`period`,`bname`,`pages`,`reby`,`sid`,`pubname`,`writname`,`edition`,`source`,`avail`,`fname`,`cno`,`address`,`gender`,`addon`) VALUES 
+ ('2019-12-23',1000008,1000012,'1208A',NULL,'Admin',0,'HARRY POTTER AND THE CHAMBER OF SECRETS',330,'Shreya Tiwari',10017,'SCHOLASTICS','J.K. ROWLING','1ST','BHOPAL','Y','Jitendra Tiwari','6778943456','MATAMARG SANGAM','F','2019-12-23'),
+ ('2020-01-03',1000009,1000017,'1204A',NULL,'Admin',11,'HARRY POTTER AND THE DEATHLY HALLOWS',545,'Kshitij Soni',10014,'SCHOLASTICS','J.K. ROWLING','1ST','BHOPAL','Y','Sunil Soni','8347895498','KABRA COLONY','M','2019-12-23');
+/*!40000 ALTER TABLE `returnlog` ENABLE KEYS */;
+
+
+--
+-- Definition of table `students`
+--
+
+DROP TABLE IF EXISTS `students`;
+CREATE TABLE `students` (
+  `sid` int(5) NOT NULL AUTO_INCREMENT,
+  `rno` char(5) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `fname` varchar(45) NOT NULL,
+  `cno` varchar(10) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `gender` char(1) NOT NULL,
+  PRIMARY KEY (`sid`)
+) ENGINE=InnoDB AUTO_INCREMENT=10018 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `students`
+--
+
+/*!40000 ALTER TABLE `students` DISABLE KEYS */;
+INSERT INTO `students` (`sid`,`rno`,`name`,`fname`,`cno`,`address`,`gender`) VALUES 
+ (10013,'1202A','Bhavesh Bhanusali','Harish Bhanusali','2738374650','KABRA COLONY,PIPARIYA','M'),
+ (10014,'1204A','Kshitij Soni','Sunil Soni','8347895498','KABRA COLONY','M'),
+ (10015,'1201A','Ashi Pandey','Krishna Kumar Pandey','2348758798','PACHMARHI ROAD','F'),
+ (10017,'1208A','Shreya Tiwari','Jitendra Tiwari','6778943456','MATAMARG SANGAM','F');
+/*!40000 ALTER TABLE `students` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
